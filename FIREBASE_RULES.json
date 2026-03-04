@@ -1,0 +1,24 @@
+{
+  "rules": {
+    "noticias": {
+      ".indexOn": ["createdAt"],
+      ".write": true,
+      ".read": true,
+      "$noticiaId": {
+        ".validate": "newData.hasChildren(['id', 'titulo', 'contenido', 'autor', 'fecha', 'createdAt', 'updatedAt'])"
+      }
+    },    "testimonios": {
+      ".indexOn": ["createdAt"],
+      ".write": true,
+      ".read": true,
+      "$testimonioId": {
+        ".validate": "newData.hasChildren(['id', 'usuario', 'contenido', 'calificacion', 'fecha', 'createdAt']) || !newData.exists()"
+      }
+    },
+    "comentarios": {
+      ".indexOn": ["createdAt"],
+      ".write": "auth != null",
+      ".read": true
+    }
+  }
+}

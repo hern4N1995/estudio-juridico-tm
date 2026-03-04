@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background with gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFD700;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D4AF37;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Dark background -->
+  <rect width="512" height="512" fill="url(#bgGradient)"/>
+  
+  <!-- Circle background for the icon -->
+  <circle cx="256" cy="256" r="240" fill="#1a1a1a" stroke="url(#goldGradient)" stroke-width="3"/>
+  
+  <!-- Scales of Justice (Balanza) - Main Element -->
+  <g filter="url(#glow)">
+    <!-- Balance beam -->
+    <rect x="180" y="185" width="152" height="8" rx="4" fill="url(#goldGradient)"/>
+    
+    <!-- Balance pivot -->
+    <circle cx="256" cy="189" r="12" fill="url(#goldGradient)"/>
+    
+    <!-- Left scale pan -->
+    <g transform="translate(220, 220)">
+      <ellipse cx="0" cy="0" rx="28" ry="20" fill="url(#goldGradient)" opacity="0.9"/>
+      <path d="M -32 -18 Q -35 -15 -35 -10 L -35 5 Q -35 8 -32 10 L 32 10 Q 35 8 35 5 L 35 -10 Q 35 -15 32 -18 Z" fill="url(#goldGradient)"/>
+      <!-- Left chain -->
+      <line x1="-20" y1="-20" x2="-20" y2="-50" stroke="url(#goldGradient)" stroke-width="2"/>
+      <line x1="0" y1="-20" x2="0" y2="-50" stroke="url(#goldGradient)" stroke-width="2"/>
+      <line x1="20" y1="-20" x2="20" y2="-50" stroke="url(#goldGradient)" stroke-width="2"/>
+    </g>
+    
+    <!-- Right scale pan -->
+    <g transform="translate(292, 220)">
+      <ellipse cx="0" cy="0" rx="28" ry="20" fill="url(#goldGradient)" opacity="0.9"/>
+      <path d="M -32 -18 Q -35 -15 -35 -10 L -35 5 Q -35 8 -32 10 L 32 10 Q 35 8 35 5 L 35 -10 Q 35 -15 32 -18 Z" fill="url(#goldGradient)"/>
+      <!-- Right chain -->
+      <line x1="-20" y1="-20" x2="-20" y2="-50" stroke="url(#goldGradient)" stroke-width="2"/>
+      <line x1="0" y1="-20" x2="0" y2="-50" stroke="url(#goldGradient)" stroke-width="2"/>
+      <line x1="20" y1="-20" x2="20" y2="-50" stroke="url(#goldGradient)" stroke-width="2"/>
+    </g>
+  </g>
+  
+  <!-- Decorative elements - 6-pointed star at bottom -->
+  <g filter="url(#glow)" transform="translate(256, 380)">
+    <!-- Outer points -->
+    <polygon points="0,-45 13,-22.5 26,-45 13,-67.5" fill="url(#goldGradient)" opacity="0.8"/>
+    <polygon points="39,-26 13,-13 39,0 26,-39" fill="url(#goldGradient)" opacity="0.8"/>
+    <polygon points="39,26 26,39 39,0 13,13" fill="url(#goldGradient)" opacity="0.8"/>
+    <polygon points="0,45 13,67.5 26,45 13,22.5" fill="url(#goldGradient)" opacity="0.8"/>
+    <polygon points="-39,26 -13,13 -39,0 -26,39" fill="url(#goldGradient)" opacity="0.8"/>
+    <polygon points="-39,-26 -26,-39 -39,0 -13,-13" fill="url(#goldGradient)" opacity="0.8"/>
+    <!-- Center circle -->
+    <circle cx="0" cy="0" r="8" fill="url(#goldGradient)"/>
+  </g>
+  
+  <!-- Border accent -->
+  <circle cx="256" cy="256" r="245" fill="none" stroke="url(#goldGradient)" stroke-width="1" opacity="0.5"/>
+  
+  <!-- Subtle decorative lines -->
+  <line x1="100" y1="256" x2="140" y2="256" stroke="url(#goldGradient)" stroke-width="2" opacity="0.3"/>
+  <line x1="372" y1="256" x2="412" y2="256" stroke="url(#goldGradient)" stroke-width="2" opacity="0.3"/>
+</svg>

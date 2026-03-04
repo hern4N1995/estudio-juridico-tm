@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 85%; /* #D9D9D9 - Gris más claro */
+    --foreground: 0 0% 15%; /* #262626 - Gris oscuro */
+    --card: 0 0% 83%; /* #D4D4D4 - Gris más claro */
+    --card-foreground: 0 0% 100%; /* #FFFFFF - Blanco (igual a modo noche) */
+    --popover: 0 0% 83%; /* #D4D4D4 - Gris más claro */
+    --popover-foreground: 0 0% 100%; /* #FFFFFF - Blanco (igual a modo noche) */
+    --primary: 45 65% 52%; /* #D4AF37 - Dorado */
+    --primary-foreground: 0 0% 0%; /* #000000 - Negro */
+    --secondary: 0 0% 80%; /* #CCCCCC - Gris más claro */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF - Blanco (igual a modo noche) */
+    --muted: 0 0% 75%; /* #BFBFBF - Gris más claro */
+    --muted-foreground: 0 0% 43%; /* #6E6E6E - Gris neutral (igual a modo noche) */
+    --accent: 45 68% 46%; /* #C5A028 - Dorado más oscuro */
+    --accent-foreground: 0 0% 0%; /* #000000 - Negro */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 77%; /* #C4C4C4 - Gris más claro */
+    --input: 0 0% 80%; /* #CCCCCC - Gris más claro */
+    --ring: 45 65% 52%; /* #D4AF37 - Dorado */
+    --radius: 0.75rem;
+  }
+  .dark {
+    --background: 0 0% 10%; /* #1A1A1A */
+    --foreground: 0 0% 69%; /* #B0B0B0 */
+    --card: 0 0% 14%; /* #242424 */
+    --card-foreground: 0 0% 100%; /* #FFFFFF */
+    --popover: 0 0% 14%; /* #242424 */
+    --popover-foreground: 0 0% 100%; /* #FFFFFF */
+    --primary: 45 65% 52%; /* #D4AF37 */
+    --primary-foreground: 0 0% 0%; /* #000000 */
+    --secondary: 0 0% 17%; /* #2C2C2C */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF */
+    --muted: 0 0% 17%; /* #2C2C2C */
+    --muted-foreground: 0 0% 43%; /* #6E6E6E */
+    --accent: 45 68% 46%; /* #C5A028 */
+    --accent-foreground: 0 0% 0%; /* #000000 */
+    --destructive: 0 71% 73%; /* #E57373 */
+    --destructive-foreground: 0 0% 0%; /* #000000 */
+    --border: 0 0% 20%; /* #333333 */
+    --input: 0 0% 16%; /* #2A2A2A */
+    --ring: 45 65% 52%; /* #D4AF37 */
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    scroll-behavior: smooth;
+  }
+}
+
+/* Infinite scroll animation for carousels */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-80%);
+  }
+}
+
+@keyframes scroll-news {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-80%);
+  }
+}
+
+@layer utilities {
+  .animate-scroll {
+    animation: scroll 50s linear infinite;
+  }
+
+  .animate-scroll-left {
+    animation: scroll-left 60s linear infinite;
+  }
+
+  .animate-scroll-news {
+    animation: scroll-news 60s linear infinite;
+  }
+  
+  /* Hide scrollbar while maintaining scrolling functionality */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
