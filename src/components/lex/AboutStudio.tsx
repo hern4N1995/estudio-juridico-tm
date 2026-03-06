@@ -7,9 +7,7 @@ export function AboutStudio() {
           </h2>
           <p className="text-lg text-foreground/90 leading-relaxed">
             Abogado <span className="font-semibold">Martínez Tránsito Salvador</span>, con amplia experiencia y especialización en:
-          </p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 my-6 max-w-2xl mx-auto">
+          </p>            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 my-6 max-w-3xl mx-auto">
             <div className="text-foreground/80">
               • Derecho Laboral & ART
             </div>
@@ -21,6 +19,9 @@ export function AboutStudio() {
             </div>
             <div className="text-foreground/80">
               • Derecho Civil
+            </div>
+            <div className="text-foreground/80 col-span-1 md:col-span-2 text-center">
+              • Régimen Jurídico del Automotor
             </div>
           </div>
 

@@ -155,7 +155,7 @@ export const newsData = {
 export const contactData = {
   title: 'Póngase en Contacto',
   subtitle: 'Estamos listos para escucharlo. Programe una consulta confidencial para evaluar su caso.',
-  address: 'La Rioja 763, 1er Piso, Oficina 3 - Corrientes, Argentina',
+  address: 'La Rioja 736, 1er Piso, Oficina 3 - Corrientes, Argentina',
   phone: '+54 9 3794 66-2013',
   email: 'transito412@gmail.com',
 };
