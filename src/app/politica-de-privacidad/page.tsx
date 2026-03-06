@@ -175,7 +175,7 @@ export default function PoliticaDePrivacidad() {
               <div className="ml-4">
                 <p><strong>Email:</strong> transito412@gmail.com</p>
                 <p><strong>Teléfono:</strong> +54 9 3794 66-2013</p>
-                <p><strong>Dirección:</strong> La Rioja 763, 1er Piso, Oficina 3 - Corrientes, Argentina</p>
+                <p><strong>Dirección:</strong> La Rioja 736, 1er Piso, Oficina 3 - Corrientes, Argentina</p>
               </div>
             </section>
 
