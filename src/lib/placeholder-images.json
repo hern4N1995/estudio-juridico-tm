@@ -3,19 +3,19 @@
     {
       "id": "hero-background",
       "description": "A modern and elegant law office interior",
-      "imageUrl": "https://images.unsplash.com/photo-1571624436279-b272aff752b5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxsYXclMjBvZmZpY2V8ZW58MHx8fHwxNzcwNjgyMDY0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/img/office.png?v=20260306",
       "imageHint": "law office"
     },
     {
       "id": "service-labor",
       "description": "Professionals in a meeting",
-      "imageUrl": "https://images.unsplash.com/photo-1768796369795-3698cd8d61d2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxicmllZmNhc2UlMjBtZWV0aW5nfGVufDB8fHx8MTc3MDY4MjA2NXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/img/laboral.png",
       "imageHint": "briefcase meeting"
     },
     {
       "id": "service-civil",
       "description": "Scales of justice in a desaturated tone",
-      "imageUrl": "https://images.unsplash.com/photo-1702261834413-3d457d7cf683?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxzY2FsZSUyMGp1c3RpY2V8ZW58MHx8fHwxNzcwNjgyMDY1fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageUrl": "/img/civil.png",
       "imageHint": "scale justice"
     },
     {

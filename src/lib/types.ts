@@ -16,6 +16,7 @@ export interface Noticia {
   fecha: string;
   autor: string;
   imagen?: string;
+  link?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -46,6 +47,7 @@ export interface NoticiaInput {
   contenido: string;
   autor: string;
   imagen?: string;
+  link?: string;
 }
 
 export interface TestimonioInput {

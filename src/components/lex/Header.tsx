@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { navLinks } from "@/lib/data";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -45,11 +45,7 @@ export function Header() {
         }
       }
 
-      // Si estamos en testimonials, considerar que estamos en achievements
-      if (closestSection === "testimonials") {
-        closestSection = "achievements";
-      }
-
+      // No hacer conversión de testimonials a achievements, mostrar testimonials como está
       setActiveSection(closestSection);
     };
 
@@ -129,13 +125,14 @@ export function Header() {
           </Button>
           <ThemeToggle />
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-            <SheetTrigger asChild>
+            <SheetTrigger asChild suppressHydrationWarning>
               <Button variant="outline" size="icon" className="md:hidden">
                 <Menu className="h-6 w-6" />
                 <span className="sr-only">Abrir menú</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="right">
+              <SheetTitle className="sr-only">Menú de navegación</SheetTitle>
               <nav className="flex flex-col gap-6 pt-10">{navItems}</nav>
             </SheetContent>
           </Sheet>

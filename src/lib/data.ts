@@ -1,4 +1,4 @@
-import { Scale, Gavel, Briefcase, Users, Award, Bot, ScaleIcon, Heart, Car } from 'lucide-react';
+import { Scale, Gavel, Briefcase, Users, Award, Bot, ScaleIcon, Heart, Car, StarHalf, StarIcon } from 'lucide-react';
 import { placeholderImages } from './placeholder-images';
 
 const getImage = (id: string) => {
@@ -14,6 +14,7 @@ export const navLinks = [
   { name: 'Servicios', href: '#services' },
   { name: 'Equipo', href: '#team' },
   { name: 'Logros', href: '#achievements' },
+  { name: 'Opiniones', href: '#testimonials' },
   { name: 'Noticias', href: '#news' },
   { name: 'Contacto', href: '#contact' },
 ];
@@ -26,7 +27,7 @@ export const heroData = {
 
 export const servicesData = {
   title: 'Áreas de Práctica',
-  subtitle: 'En el estudio jurídico contamos con abogados, con amplia experiencia y de trayectoria en diferentes ramas legales. Contamos con especialistas en Derecho Laboral, ART, Civil, Penal y Fuero Federal etc. ',
+  subtitle: 'En el estudio jurídico contamos con abogados, con amplia experiencia y de trayectoria en diferentes ramas legales.',
   services: [
     {
       title: 'Derecho Laboral & ART',
@@ -67,7 +68,7 @@ export const teamData = {
   members: [
     {
       name: 'Tránsito Salvador Martínez',
-      specialty: 'Abogado - Mediador\nEspecialista en Derecho Penal & Laboral',
+      specialty: 'Abogado - Mediador\nEspecialista en Derecho Laboral; ART y\nDerecho Penal',
       image: getImage('team-laura'),
       email: 'trasito412@gmail.com',
       phone: '3794662013',
@@ -83,6 +84,7 @@ export const teamData = {
       name: 'María de los Angeles Oliva',
       specialty: 'Abogada - Mediadora\nEspecialista en Derecho de Familia, Niñez & Adolescencia',
       image: getImage('team-sofia'),
+      email: 'olivamangeles@gmail.com',
       phone: '3794035725',
     },
   ],
@@ -90,22 +92,22 @@ export const teamData = {
 
 export const achievementsData = {
   title: 'Una Trayectoria de Éxito',
-  subtitle: 'Nuestros resultados hablan por nosotros. Décadas de experiencia y casos emblemáticos respaldan nuestra reputación.',
+  subtitle: 'La confianza de nuestros clientes se refleja en las opiniones que nos comparten. Descubra por qué nos recomiendan en Google.',
   achievements: [
     {
-      icon: Award,
-      value: '200+',
-      label: 'Casos Ganados Exitosamente',
+      icon: StarIcon,
+      value: '5.0',
+      label: 'Calificación en Google',
     },
     {
       icon: Users,
-      value: '98%',
-      label: 'Satisfacción de Clientes',
+      value: '100+',
+      label: 'Opiniones de Clientes',
     },
     {
       icon: Briefcase,
-      value: '50+',
-      label: 'Empresas Asesoradas',
+      value: '150+',
+      label: 'Clientes Asesorados',
     },
      {
       icon: ScaleIcon,
@@ -113,6 +115,7 @@ export const achievementsData = {
       label: 'Compromiso y Ética',
     },
   ],
+  googleReviewsLink: 'https://www.google.com.ar/search?sxsrf=ACYBGNQDnuW-Kry7m1tnKC4DdZxXvFFy2A%3A1571524101231&source=hp&ei=BY6rXcuIDJO95OUP6-6YKA&q=estudio+quatro&oq=estudio+quatro&gs_l=psy-ab.3..35i39j0i22i30j0i22i10i30j38.1557.4302..4748...0.0..0.98.1301.14......0....1..gws-wiz.......0j0i131j0i67j0i20i263j0i10.ph4UaGhHjag&ved=0ahUKEwiLn7u-r6nlAhWTHrkGHWs3BgUQ4dUDCAY&uact=5#lrd=0x94456c783f70041d:0xd24a2d1dada87c4f,1,,,',
 };
 
 export const testimonialsData = {

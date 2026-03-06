@@ -40,10 +40,20 @@ export function NewsGrid({ news, onEdit, onDelete, isAdmin }: NewsGridProps) {
         day: 'numeric',
       });
     }
-  };
-  const NewsCard = ({ newsItem }: { newsItem: Noticia }) => (
-    <Card className="flex flex-col justify-between border-[#D4AF37]/20 bg-background hover:border-[#D4AF37]/50 transition-all duration-300 hover:shadow-lg">
-      <div className="p-6">
+  };  const NewsCard = ({ newsItem }: { newsItem: Noticia }) => (
+    <Card className="flex flex-col justify-between border-[#D4AF37]/20 bg-card hover:border-[#D4AF37]/50 transition-all duration-300 hover:shadow-lg overflow-hidden">
+      {/* Imagen de la noticia */}
+      <div className="w-full h-48 overflow-hidden border-b border-[#D4AF37]/20 bg-gray-300/40 dark:bg-gray-600/40">
+        <img
+          src={newsItem.imagen || '/img/noticias.png'}
+          alt={newsItem.titulo}
+          className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            // Si la imagen falla, mostrar la imagen por defecto
+            (e.target as HTMLImageElement).src = '/img/noticias.png';
+          }}
+        />
+      </div><div className="p-6">
         <div className="space-y-3">
           <div>
             <h3 className="font-bold text-foreground line-clamp-2 text-lg">
@@ -58,25 +68,20 @@ export function NewsGrid({ news, onEdit, onDelete, isAdmin }: NewsGridProps) {
             {newsItem.contenido}
           </p>
         </div>
-      </div>
 
-      {newsItem.imagen && (
-        <div className="flex-shrink-0 border-t border-[#D4AF37]/20 p-6">
+        {/* Botón "Ver más" que redirige al link */}
+        {newsItem.link && (
           <a
-            href={
-              newsItem.imagen.startsWith('http://') || newsItem.imagen.startsWith('https://')
-                ? newsItem.imagen
-                : `https://${newsItem.imagen}`
-            }
+            href={newsItem.link.startsWith('http') ? newsItem.link : `https://${newsItem.link}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-[#D4AF37] hover:text-[#E5C158] font-semibold transition-colors text-sm"
+            className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-lg bg-[#D4AF37]/20 text-[#D4AF37] hover:bg-[#D4AF37]/30 transition-colors text-sm font-semibold"
           >
-            Ver noticia
             <ExternalLink className="w-4 h-4" />
+            Ver más
           </a>
-        </div>
-      )}
+        )}
+      </div>
 
       {isAdmin && (
         <div className="flex-shrink-0 border-t border-[#D4AF37]/20 p-6 flex gap-3">
@@ -97,9 +102,7 @@ export function NewsGrid({ news, onEdit, onDelete, isAdmin }: NewsGridProps) {
         </div>
       )}
     </Card>
-  );
-
-  return (
+  );  return (
     <div className="w-full">
       {/* Grid de 4 tarjetas */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -108,7 +111,7 @@ export function NewsGrid({ news, onEdit, onDelete, isAdmin }: NewsGridProps) {
         ))}
       </div>      {/* Botón "Ver más" si hay más de 4 noticias */}
       {news.length > 4 && (
-        <div className="flex justify-center mb-2">
+        <div className="flex justify-center -mb-16">
           <Button
             onClick={() => setShowModal(true)}
             className="px-8 py-3 rounded-lg bg-[#D4AF37] text-[#1A1A1A] font-semibold hover:bg-[#E5C158] transition-colors"
@@ -143,10 +146,23 @@ export function NewsGrid({ news, onEdit, onDelete, isAdmin }: NewsGridProps) {
                       </h3>
                       <p className="text-xs text-foreground/70 mt-1">
                         {formatDate(newsItem.createdAt)}
-                      </p>
-                      <p className="text-sm text-foreground/80 mt-3 leading-relaxed">
+                      </p>                      <p className="text-sm text-foreground/80 mt-3 leading-relaxed">
                         {newsItem.contenido}
                       </p>
+                      
+                      {/* Botón "Ver más" en el modal */}
+                      {newsItem.link && (
+                        <a
+                          href={newsItem.link.startsWith('http') ? newsItem.link : `https://${newsItem.link}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-lg bg-[#D4AF37]/20 text-[#D4AF37] hover:bg-[#D4AF37]/30 transition-colors text-sm font-semibold"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          Ver noticia completa
+                        </a>
+                      )}
+
                       {isAdmin && (
                         <div className="flex gap-2 mt-4">
                           <button
@@ -166,24 +182,8 @@ export function NewsGrid({ news, onEdit, onDelete, isAdmin }: NewsGridProps) {
                             <Trash2 className="w-4 h-4" />
                             Eliminar
                           </button>
-                        </div>
-                      )}
+                        </div>                      )}
                     </div>
-                    {newsItem.imagen && (
-                      <a
-                        href={
-                          newsItem.imagen.startsWith('http://') || newsItem.imagen.startsWith('https://')
-                            ? newsItem.imagen
-                            : `https://${newsItem.imagen}`
-                        }
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex-shrink-0 p-2 text-[#D4AF37] hover:text-[#E5C158] transition-colors"
-                        title="Ver noticia"
-                      >
-                        <ExternalLink className="w-5 h-5" />
-                      </a>
-                    )}
                   </div>
                 </div>
               ))}

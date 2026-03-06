@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { heroData } from "@/lib/data";
 import { Button } from "@/components/ui/button";
+import { GoldenDivider } from "./GoldenDivider";
 
 export function Hero() {
   return (
@@ -34,7 +35,7 @@ export function Hero() {
                 dangerouslySetInnerHTML={{ __html: heroData.title }}
               />
             </div>
-            <p className="mx-auto mt-3 max-w-2xl text-sm text-foreground md:text-base">
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-white md:text-base">
               {heroData.subtitle}
             </p>
             <div className="mt-6">
@@ -45,16 +46,8 @@ export function Hero() {
           </div>
         </div>
       </section>
-      <div className="flex items-center justify-center py-12 bg-card">
-        <div className="flex items-center justify-center gap-8 w-full max-w-5xl px-4">
-          <div className="flex-1" style={{ height: '4px', backgroundColor: '#d4af37', borderRadius: '2px', opacity: 0.6 }} />
-          <div className="flex items-center gap-6 shrink-0">
-            <div className="rounded-full" style={{ width: '96px', height: '4px', backgroundColor: '#d4af37' }} />
-            <span className="text-4xl font-bold whitespace-nowrap" style={{ color: '#d4af37' }}>✦</span>
-            <div className="rounded-full" style={{ width: '96px', height: '4px', backgroundColor: '#d4af37' }} />
-          </div>
-          <div className="flex-1" style={{ height: '4px', backgroundColor: '#d4af37', borderRadius: '2px', opacity: 0.6 }} />
-        </div>
+      <div className="py-12 bg-card">
+        <GoldenDivider backgroundColor="bg-card" />
       </div>
     </>
   );

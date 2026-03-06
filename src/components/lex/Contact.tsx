@@ -27,20 +27,101 @@ export function Contact() {
   });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  // Validaciones
+  const validateNombre = (value: string): string => {
+    if (!value.trim()) return "El nombre es requerido";
+    if (value.length < 3) return "El nombre debe tener al menos 3 caracteres";
+    if (value.length > 50) return "El nombre no puede exceder 50 caracteres";
+    if (!/^[a-záéíóúñA-ZÁÉÍÓÚÑ\s]+$/.test(value)) return "El nombre solo puede contener letras y espacios (sin números ni caracteres especiales)";
+    if (/\d/.test(value)) return "El nombre no puede contener números";
+    return "";
+  };
+
+  const validateEmail = (value: string): string => {
+    if (!value.trim()) return "El email es requerido";
+    // Validación más estricta de email
+    const emailRegex = /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(value)) return "Email inválido (ejemplo: usuario@dominio.com)";
+    if (value.length > 100) return "El email no puede exceder 100 caracteres";
+    return "";
+  };
+
+  const validateTelefono = (value: string): string => {
+    if (!value.trim()) return "El teléfono es requerido";
+    // Solo números y caracteres especiales válidos para teléfono
+    if (!/^[0-9\s\-\+\(\)]+$/.test(value)) return "El teléfono solo puede contener números y caracteres especiales (-, +, espacios, paréntesis). Sin letras";
+    const soloNumeros = value.replace(/\D/g, "");
+    if (soloNumeros.length < 10) return "El teléfono debe tener al menos 10 dígitos";
+    if (soloNumeros.length > 15) return "El teléfono no puede exceder 15 dígitos";
+    return "";
+  };
+
+  const validateMensaje = (value: string): string => {
+    if (!value.trim()) return "El mensaje es requerido";
+    if (value.length < 10) return "El mensaje debe tener al menos 10 caracteres";
+    if (value.length > 500) return "El mensaje no puede exceder 500 caracteres";
+    // Detectar spam simple
+    if (/^[\d\s]+$/.test(value)) return "El mensaje no puede contener solo números";
+    if (/(.)\1{9,}/.test(value)) return "El mensaje contiene caracteres repetidos sospechosos";
+    return "";
+  };
+
+  const validateProvincia = (value: string): string => {
+    if (!value) return "Debes seleccionar una provincia";
+    return "";
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    
+    // Validaciones en tiempo real para ciertos campos
+    if (name === "nombre") {
+      const error = validateNombre(value);
+      setErrors(prev => ({ ...prev, nombre: error }));
+    } else if (name === "email") {
+      const error = validateEmail(value);
+      setErrors(prev => ({ ...prev, email: error }));
+    } else if (name === "telefono") {
+      const error = validateTelefono(value);
+      setErrors(prev => ({ ...prev, telefono: error }));
+    } else if (name === "mensaje") {
+      const error = validateMensaje(value);
+      setErrors(prev => ({ ...prev, mensaje: error }));
+    }
+    
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleProvinceChange = (value: string) => {
+    const error = validateProvincia(value);
+    setErrors(prev => ({ ...prev, provincia: error }));
     setFormData(prev => ({ ...prev, provincia: value }));
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: { [key: string]: string } = {};
+    
+    newErrors.nombre = validateNombre(formData.nombre);
+    newErrors.email = validateEmail(formData.email);
+    newErrors.telefono = validateTelefono(formData.telefono);
+    newErrors.mensaje = validateMensaje(formData.mensaje);
+    newErrors.provincia = validateProvincia(formData.provincia);
+
+    setErrors(newErrors);
+    return Object.values(newErrors).every(error => error === "");
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
+
+    if (!validateForm()) {
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await fetch("/api/send-contact", {
@@ -54,6 +135,7 @@ export function Contact() {
       if (response.ok) {
         setMessage({ type: "success", text: "¡Consulta enviada exitosamente! Nos pondremos en contacto pronto." });
         setFormData({ nombre: "", email: "", telefono: "", provincia: "", mensaje: "" });
+        setErrors({});
       } else {
         setMessage({ type: "error", text: data.error || "Error al enviar la consulta" });
       }
@@ -64,9 +146,10 @@ export function Contact() {
     }
   };
   return (
-    <section id="contact" className="bg-card py-2 md:py-4 pb-24 md:pb-24 relative">
-      <GoldenDivider />
-      <div className="container mx-auto max-w-7xl px-4 md:px-6">
+    <>
+      <section id="contact" className="bg-card py-12 md:py-12 pb-20 relative">
+        <GoldenDivider backgroundColor="bg-card" />
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 pt-8">
         <div className="mb-12 text-center">
           <h2 className="font-headline text-3xl font-bold text-foreground md:text-4xl">
             {contactData.title}
@@ -76,75 +159,90 @@ export function Contact() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2">
-          <Card className="border-border bg-background p-8">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 mb-8">
+          <Card className="border-border bg-background p-8 pb-12">
             <h3 className="font-headline text-2xl font-bold text-foreground">Enviar Mensaje</h3>
             <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-              <Input 
-                type="text" 
-                name="nombre"
-                placeholder="Nombre Completo" 
-                className="bg-input text-foreground" 
-                value={formData.nombre}
-                onChange={handleInputChange}
-                required
-              />
-              <Input 
-                type="email" 
-                name="email"
-                placeholder="Email" 
-                className="bg-input text-foreground"
-                value={formData.email}
-                onChange={handleInputChange}
-                required
-              />
-              <Input 
-                type="tel" 
-                name="telefono"
-                placeholder="Teléfono" 
-                className="bg-input text-foreground"
-                value={formData.telefono}
-                onChange={handleInputChange}
-                required
-              />
-              <Select value={formData.provincia} onValueChange={handleProvinceChange}>
-                <SelectTrigger className="bg-input text-foreground border-input">
-                  <SelectValue placeholder="Seleccionar Provincia" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="buenos-aires">Buenos Aires</SelectItem>
-                  <SelectItem value="catamarca">Catamarca</SelectItem>
-                  <SelectItem value="chaco">Chaco</SelectItem>
-                  <SelectItem value="chubut">Chubut</SelectItem>
-                  <SelectItem value="cordoba">Córdoba</SelectItem>
-                  <SelectItem value="corrientes">Corrientes</SelectItem>
-                  <SelectItem value="entre-rios">Entre Ríos</SelectItem>
-                  <SelectItem value="formosa">Formosa</SelectItem>
-                  <SelectItem value="jujuy">Jujuy</SelectItem>
-                  <SelectItem value="la-pampa">La Pampa</SelectItem>
-                  <SelectItem value="la-rioja">La Rioja</SelectItem>
-                  <SelectItem value="mendoza">Mendoza</SelectItem>
-                  <SelectItem value="misiones">Misiones</SelectItem>
-                  <SelectItem value="neuquen">Neuquén</SelectItem>
-                  <SelectItem value="rio-negro">Río Negro</SelectItem>
-                  <SelectItem value="salta">Salta</SelectItem>
-                  <SelectItem value="san-juan">San Juan</SelectItem>
-                  <SelectItem value="san-luis">San Luis</SelectItem>
-                  <SelectItem value="santa-cruz">Santa Cruz</SelectItem>
-                  <SelectItem value="santa-fe">Santa Fe</SelectItem>
-                  <SelectItem value="santiago-del-estero">Santiago del Estero</SelectItem>
-                  <SelectItem value="tierra-del-fuego">Tierra del Fuego</SelectItem>
-                  <SelectItem value="tucuman">Tucumán</SelectItem>
-                </SelectContent>
-              </Select>
-              <Textarea 
-                name="mensaje"
-                placeholder="Su mensaje..." 
-                className="bg-input text-foreground"
-                value={formData.mensaje}
-                onChange={handleInputChange}
-                required
-              />
+              <div>
+                <Input 
+                  type="text" 
+                  name="nombre"
+                  placeholder="Nombre Completo" 
+                  className={`bg-input text-foreground ${errors.nombre ? 'border-red-500' : ''}`}
+                  value={formData.nombre}
+                  onChange={handleInputChange}
+                  required
+                />
+                {errors.nombre && <p className="text-red-500 text-xs mt-1">{errors.nombre}</p>}
+              </div>
+              <div>
+                <Input 
+                  type="email" 
+                  name="email"
+                  placeholder="Email" 
+                  className={`bg-input text-foreground ${errors.email ? 'border-red-500' : ''}`}
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+                />
+                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+              </div>
+              <div>
+                <Input 
+                  type="tel" 
+                  name="telefono"
+                  placeholder="Teléfono (ej: +54 9 3794 66-2013)" 
+                  className={`bg-input text-foreground ${errors.telefono ? 'border-red-500' : ''}`}
+                  value={formData.telefono}
+                  onChange={handleInputChange}
+                  required
+                />
+                {errors.telefono && <p className="text-red-500 text-xs mt-1">{errors.telefono}</p>}
+              </div>
+              <div>
+                <Select value={formData.provincia} onValueChange={handleProvinceChange}>
+                  <SelectTrigger className={`bg-input text-foreground border-input ${errors.provincia ? 'border-red-500' : ''}`}>
+                    <SelectValue placeholder="Seleccionar Provincia" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="buenos-aires">Buenos Aires</SelectItem>
+                    <SelectItem value="catamarca">Catamarca</SelectItem>
+                    <SelectItem value="chaco">Chaco</SelectItem>
+                    <SelectItem value="chubut">Chubut</SelectItem>
+                    <SelectItem value="cordoba">Córdoba</SelectItem>
+                    <SelectItem value="corrientes">Corrientes</SelectItem>
+                    <SelectItem value="entre-rios">Entre Ríos</SelectItem>
+                    <SelectItem value="formosa">Formosa</SelectItem>
+                    <SelectItem value="jujuy">Jujuy</SelectItem>
+                    <SelectItem value="la-pampa">La Pampa</SelectItem>
+                    <SelectItem value="la-rioja">La Rioja</SelectItem>
+                    <SelectItem value="mendoza">Mendoza</SelectItem>
+                    <SelectItem value="misiones">Misiones</SelectItem>
+                    <SelectItem value="neuquen">Neuquén</SelectItem>
+                    <SelectItem value="rio-negro">Río Negro</SelectItem>
+                    <SelectItem value="salta">Salta</SelectItem>
+                    <SelectItem value="san-juan">San Juan</SelectItem>
+                    <SelectItem value="san-luis">San Luis</SelectItem>
+                    <SelectItem value="santa-cruz">Santa Cruz</SelectItem>
+                    <SelectItem value="santa-fe">Santa Fe</SelectItem>
+                    <SelectItem value="santiago-del-estero">Santiago del Estero</SelectItem>
+                    <SelectItem value="tierra-del-fuego">Tierra del Fuego</SelectItem>
+                    <SelectItem value="tucuman">Tucumán</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.provincia && <p className="text-red-500 text-xs mt-1">{errors.provincia}</p>}
+              </div>
+              <div>
+                <Textarea 
+                  name="mensaje"
+                  placeholder="Su mensaje..." 
+                  className={`bg-input text-foreground ${errors.mensaje ? 'border-red-500' : ''}`}
+                  value={formData.mensaje}
+                  onChange={handleInputChange}
+                  required
+                />
+                {errors.mensaje && <p className="text-red-500 text-xs mt-1">{errors.mensaje}</p>}
+              </div>
               {message && (
                 <div className={`p-3 rounded-lg text-sm font-semibold ${
                   message.type === "success" 
@@ -210,5 +308,6 @@ export function Contact() {
         </div>
       </div>
     </section>
+    </>
   );
 }

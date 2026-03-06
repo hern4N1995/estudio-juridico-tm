@@ -1,6 +1,6 @@
 export function AboutStudio() {
   return (
-    <section className="bg-card py-8 md:py-2 pb-24 md:pb-24">
+    <section className="bg-card -mt-4 py-0 md:py-0 pb-14 md:pb-14">
       <div className="container mx-auto max-w-4xl px-4 md:px-6"><div className="space-y-4 text-center">
           <h2 className="font-headline text-3xl font-bold text-foreground md:text-4xl">
             Estudio Jurídico en Corrientes Capital

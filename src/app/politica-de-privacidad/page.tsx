@@ -8,9 +8,8 @@ export default function PoliticaDePrivacidad() {
     <>
       <Header />
       <main className="min-h-screen bg-background">
-        <div className="container mx-auto max-w-4xl px-4 py-16 md:py-24">
-          <div className="flex items-center justify-between mb-8">
-            <h1 className="font-headline text-4xl font-bold text-white">
+        <div className="container mx-auto max-w-4xl px-4 py-16 md:py-24">          <div className="flex items-center justify-between mb-8">
+            <h1 className="font-headline text-4xl font-bold text-foreground">
               Política de Privacidad
             </h1>
             <Link
@@ -25,18 +24,15 @@ export default function PoliticaDePrivacidad() {
             Última actualización: Febrero 2026
           </p>
 
-          <div className="space-y-8 text-foreground">
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+          <div className="space-y-8 text-foreground">            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 1. Introducción
               </h2>
               <p className="mb-4">
                 Estudio Jurídico Tránsito Martínez se compromete a proteger su privacidad y garantizar que comprenda cómo usamos la información personal que nos proporciona. Esta Política de Privacidad describe nuestras prácticas respecto a la recopilación, uso y protección de sus datos personales.
               </p>
-            </section>
-
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+            </section>            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 2. Información que Recopilamos
               </h2>
               <p className="mb-4">Recopilamos información personal que usted nos proporciona voluntariamente a través de nuestro formulario de contacto, incluyendo:</p>
@@ -50,10 +46,8 @@ export default function PoliticaDePrivacidad() {
               <p className="mt-4">
                 También podemos recopilar información técnica automáticamente, como su dirección IP, tipo de navegador, páginas visitadas y duración de la visita, mediante el uso de cookies y tecnologías similares.
               </p>
-            </section>
-
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+            </section>            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 3. Uso de la Información
               </h2>
               <p className="mb-4">Utilizamos la información personal que recopilamos para:</p>
@@ -65,10 +59,8 @@ export default function PoliticaDePrivacidad() {
                 <li>Prevenir fraude y mantener la seguridad del sitio</li>
                 <li>Enviar información sobre nuestros servicios (solo con consentimiento previo)</li>
               </ul>
-            </section>
-
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+            </section>            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 4. Secreto Profesional y Confidencialidad
               </h2>
               <p className="mb-4">
@@ -83,10 +75,8 @@ export default function PoliticaDePrivacidad() {
               <p className="mt-4">
                 La información compartida a través de nuestros formularios de contacto será tratada bajo absoluto secreto profesional.
               </p>
-            </section>
-
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+            </section>            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 5. Protección de Datos
               </h2>
               <p className="mb-4">
@@ -99,10 +89,8 @@ export default function PoliticaDePrivacidad() {
                 <li>Auditorías periódicas de seguridad</li>
                 <li>Políticas de retención de datos</li>
               </ul>
-            </section>
-
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+            </section>            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 6. Compartir Información con Terceros
               </h2>
               <p className="mb-4">
@@ -116,10 +104,8 @@ export default function PoliticaDePrivacidad() {
               <p className="mt-4">
                 No vendemos, arrendamos ni comercializamos información personal de nuestros clientes.
               </p>
-            </section>
-
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+            </section>            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 7. Cookies y Tecnologías de Rastreo
               </h2>
               <p className="mb-4">
@@ -133,10 +119,8 @@ export default function PoliticaDePrivacidad() {
               <p className="mt-4">
                 Puede controlar las cookies a través de la configuración de su navegador. Tenga en cuenta que deshabilitar cookies puede afectar la funcionalidad del sitio.
               </p>
-            </section>
-
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+            </section>            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 8. Derechos del Usuario
               </h2>
               <p className="mb-4">
@@ -152,10 +136,8 @@ export default function PoliticaDePrivacidad() {
               <p className="mt-4">
                 Para ejercer estos derechos, comuníquese directamente con nuestro equipo.
               </p>
-            </section>
-
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+            </section>            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 9. Retención de Datos
               </h2>
               <p className="mb-4">
@@ -169,28 +151,22 @@ export default function PoliticaDePrivacidad() {
               <p className="mt-4">
                 Después de estos períodos, los datos serán eliminados de forma segura.
               </p>
-            </section>
-
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+            </section>            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 10. Comunicaciones de Marketing
               </h2>
               <p className="mb-4">
                 Solo enviaremos comunicaciones promocionales sobre nuestros servicios si usted ha optado por recibirlas. Siempre puede darse de baja utilizando el enlace que se proporciona en cada comunicación.
               </p>
-            </section>
-
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+            </section>            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 11. Cambios en Esta Política
               </h2>
               <p className="mb-4">
                 Podemos actualizar esta Política de Privacidad en cualquier momento. Las actualizaciones entrarán en vigencia inmediatamente después de su publicación. Le recomendamos revisar esta política periódicamente para mantenerse informado.
               </p>
-            </section>
-
-            <section>
-              <h2 className="font-headline text-2xl font-bold text-white mb-4">
+            </section>            <section>
+              <h2 className="font-headline text-2xl font-bold text-foreground mb-4">
                 12. Contacto para Privacidad
               </h2>
               <p className="mb-4">

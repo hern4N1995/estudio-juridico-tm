@@ -9,6 +9,7 @@ import { getNoticias, addNoticia, deleteNoticia, updateNoticia } from "@/lib/fir
 import { Noticia } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { NewsGrid } from "@/components/news-grid";
+import { GoldenDivider } from "./GoldenDivider";
 
 interface NewsItem {
   id: string;
@@ -28,13 +29,13 @@ export function News() {
   const [passwordInput, setPasswordInput] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [editingId, setEditingId] = useState<string | null>(null);
-  const [formData, setFormData] = useState({
+  const [editingId, setEditingId] = useState<string | null>(null);  const [formData, setFormData] = useState({
     titulo: "",
     contenido: "",
     link: "",
     autor: "Sistema Jurídico",
   });
+  const [extractedImagePreview, setExtractedImagePreview] = useState<string | null>(null);
 
   // Cargar noticias desde Firebase al montar
   useEffect(() => {
@@ -45,33 +46,18 @@ export function News() {
     if (isAuth === "true") {
       setIsAuthenticated(true);
     }
-  }, []);
-
-  const loadNews = async () => {
-    setLoading(true);
+  }, []);  const loadNews = async () => {
     try {
+      console.log('[loadNews] Iniciando carga...');
+      
+      // Intentar primero desde Firebase (más rápido y confiable para cambios inmediatos)
       const noticias = await getNoticias(5);
+      console.log('[loadNews] ✅ Cargadas desde Firebase:', noticias.length, 'noticias');
       setNews(noticias);
+      return;
     } catch (error) {
-      console.error("Error loading news:", error);
-      // Fallback a localStorage si Firebase no está disponible
-      const storedNews = localStorage.getItem("siteLegalNews");
-      if (storedNews) {
-        try {
-          const parsed = JSON.parse(storedNews);
-          setNews(parsed.map((item: any) => ({
-            id: item.id,
-            titulo: item.title,
-            contenido: item.summary,
-            link: item.link,
-            createdAt: new Date(item.createdAt).toISOString(),
-          })));
-        } catch (e) {
-          console.error("Error parsing stored news:", e);
-        }
-      }
-    } finally {
-      setLoading(false);
+      console.error("[loadNews] ❌ Error crítico:", error);
+      setNews([]); // Set empty array to prevent UI errors
     }
   };
 
@@ -105,72 +91,161 @@ export function News() {
 
     setLoading(true);
     try {
+      // Usar el link original como imagen por defecto
+      let imageUrl = formData.link || undefined;
+      console.log("[News] Iniciando publicación de noticia...");
+      console.log("[News] Link ingresado:", formData.link);
+
+      let newNoticiaId: string | undefined;
+
+      // Guardar la noticia inmediatamente con o sin imagen extraída
       if (editingId) {
-        // Editar noticia existente
         await updateNoticia(editingId, {
           titulo: formData.titulo,
           contenido: formData.contenido,
           autor: formData.autor,
-          imagen: formData.link || undefined,
+          ...(imageUrl ? { imagen: imageUrl } : {}),
+          ...(formData.link ? { link: formData.link } : {}),
         });
-        toast({
-          title: "Éxito",
-          description: "Noticia actualizada exitosamente",
-        });
+        newNoticiaId = editingId;
       } else {
-        // Agregar nueva noticia
-        await addNoticia({
+        const noticia = await addNoticia({
           titulo: formData.titulo,
           contenido: formData.contenido,
           autor: formData.autor,
-          imagen: formData.link || undefined,
+          ...(imageUrl ? { imagen: imageUrl } : {}),
+          ...(formData.link ? { link: formData.link } : {}),
         });
-        toast({
-          title: "Éxito",
-          description: "Noticia agregada exitosamente",
-        });
-      }
+        newNoticiaId = noticia.id;
+      }      // Mostrar toast inmediatamente (sin esperar a que carguen las noticias)
+      toast({
+        title: "✅ Éxito",
+        description: editingId ? "Noticia actualizada exitosamente" : "Noticia agregada exitosamente",
+      });      // Guardar link antes de resetear formulario
+      const linkToExtract = formData.link;
 
-      // Recargar noticias
-      await loadNews();
-      // Resetear formulario
+      // Resetear formulario inmediatamente
       setFormData({ titulo: "", contenido: "", link: "", autor: "Sistema Jurídico" });
+      setExtractedImagePreview(null);
       setShowForm(false);
       setEditingId(null);
+
+      // Recargar noticias después de un pequeño delay para asegurar que Firebase sincronice
+      console.log("[News] Recargando noticias después de publicar...");
+      setTimeout(async () => {
+        try {
+          await loadNews();
+          console.log("[News] Noticias recargadas exitosamente");
+        } catch (error) {
+          console.error("[News] Error recargar noticias:", error);
+        }
+      }, 300);
+
+      // Extraer imagen en segundo plano (sin bloquear)
+      if (linkToExtract && !linkToExtract.match(/\.(jpg|jpeg|png|gif|webp)$/i) && newNoticiaId) {
+        extractImageInBackground(newNoticiaId, linkToExtract);
+      }
     } catch (error) {
       console.error("Error adding/updating news:", error);
       toast({
-        title: "Error",
+        title: "❌ Error",
         description: "Error al guardar noticia. Intenta de nuevo.",
         variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
-  };
-  const handleDeleteNews = async (id: string) => {
+  };  // Función para extraer imagen en segundo plano
+  const extractImageInBackground = async (noticiaId: string, linkUrl: string) => {
+    try {
+      let urlToProcess = linkUrl.trim();
+      if (!urlToProcess.startsWith('http://') && !urlToProcess.startsWith('https://')) {
+        urlToProcess = 'https://' + urlToProcess;
+      }
+
+      console.log("[News-BG] Extrayendo imagen en segundo plano para:", urlToProcess);
+
+      // Crear un AbortController con timeout de 10 segundos
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+      try {
+        const response = await fetch("/api/extract-image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ url: urlToProcess }),
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          console.warn("[News-BG] API retornó error:", response.status);
+          return;
+        }
+
+        const data = await response.json();
+        console.log("[News-BG] Respuesta API extract-image:", data);
+
+        if (data.success && data.imageUrl) {
+          // Actualizar solo la imagen si se extrajo correctamente
+          console.log("[News-BG] ✅ Imagen extraída. Actualizando noticia...");
+          await updateNoticia(noticiaId, {
+            imagen: data.imageUrl,
+          } as Partial<Noticia>);
+          
+          // Recargar noticias para mostrar la imagen actualizada
+          await loadNews();
+          console.log("[News-BG] Noticias recargadas con imagen extraída");
+        }
+      } catch (fetchError: any) {
+        clearTimeout(timeoutId);
+        if (fetchError.name === 'AbortError') {
+          console.warn("[News-BG] ⏱️ Timeout extrayendo imagen (>10s)");
+        } else {
+          console.error("[News-BG] Error en fetch:", fetchError.message);
+        }
+      }
+    } catch (error) {
+      console.error("[News-BG] Error extrayendo imagen en segundo plano:", error);
+      // No mostrar error al usuario, ya que la noticia ya se publicó
+    }  };  const handleDeleteNews = async (id: string) => {
     if (!confirm("¿Estás seguro de que quieres eliminar esta noticia?")) return;
 
-    setLoading(true);
     try {
+      console.log("[News] Eliminando noticia:", id);
+      
+      // 1. Eliminar de Firebase (esperar a que se complete)
       await deleteNoticia(id);
-      await loadNews();
+      console.log("[News] Noticia eliminada exitosamente de Firebase");
+      
+      // 2. Mostrar toast de éxito INMEDIATAMENTE
       toast({
-        title: "Éxito",
-        description: "Noticia eliminada exitosamente",
+        title: "✅ Éxito",
+        description: "Noticia eliminada correctamente",
       });
+      
+      // 3. Esperar 500ms para que Firebase sincronice completamente
+      console.log("[News] Esperando sincronización de Firebase...");
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // 4. Recargar noticias (AHORA forzar recarga)
+      console.log("[News] Recargando noticias después de eliminar...");
+      try {
+        await loadNews();
+        console.log("[News] ✅ Noticias recargadas correctamente");
+      } catch (error) {
+        console.error("[News] Error recargando:", error);
+      }
     } catch (error) {
-      console.error("Error deleting news:", error);
+      console.error("[News] Error eliminando noticia:", error);
       toast({
-        title: "Error",
-        description: "Error al eliminar noticia",
+        title: "❌ Error",
+        description: "No se pudo eliminar la noticia",
         variant: "destructive",
       });
-    } finally {
-      setLoading(false);
     }
   };
-
   const handleEditNews = (noticia: Noticia) => {
     setEditingId(noticia.id);
     setFormData({
@@ -179,15 +254,15 @@ export function News() {
       link: noticia.imagen || "",
       autor: noticia.autor || "Sistema Jurídico",
     });
+    setExtractedImagePreview(noticia.imagen || null);
     setShowForm(true);
   };
-
   const handleCancelEdit = () => {
     setEditingId(null);
     setFormData({ titulo: "", contenido: "", link: "", autor: "Sistema Jurídico" });
+    setExtractedImagePreview(null);
     setShowForm(false);
   };
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const today = new Date();
@@ -205,48 +280,10 @@ export function News() {
         day: "numeric",
       });
     }
-  };
-
-  return (
-    <>
-      <div id="news" className="flex items-center justify-center py-12 bg-background">
-        <div className="flex items-center justify-center gap-8 w-full max-w-5xl px-4">
-          <div
-            className="flex-1"
-            style={{
-              height: "4px",
-              backgroundColor: "#d4af37",
-              borderRadius: "2px",
-              opacity: 0.6,
-            }}
-          />
-          <div className="flex items-center gap-6 shrink-0">
-            <div
-              className="rounded-full"
-              style={{ width: "96px", height: "4px", backgroundColor: "#d4af37" }}
-            />
-            <span className="text-4xl font-bold whitespace-nowrap" style={{ color: "#d4af37" }}>
-              ✦
-            </span>
-            <div
-              className="rounded-full"
-              style={{ width: "96px", height: "4px", backgroundColor: "#d4af37" }}
-            />
-          </div>
-          <div
-            className="flex-1"
-            style={{
-              height: "4px",
-              backgroundColor: "#d4af37",
-              borderRadius: "2px",
-              opacity: 0.6,
-            }}
-          />
-        </div>
-      </div>
-
-      <section className="bg-background py-2 md:py-4 pb-24 relative">
-        <div className="container mx-auto max-w-7xl px-4 md:px-6">
+  };  return (
+    <>        <section id="news" className="bg-background py-12 md:py-12 pb-12 relative">
+        <GoldenDivider backgroundColor="bg-background" />
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 pt-8">
           <div className="mb-12 text-center">
             <h2 className="font-headline text-3xl font-bold text-foreground md:text-4xl">
               {newsData.title}
@@ -296,8 +333,7 @@ export function News() {
                   <span className="font-semibold">
                     {showForm ? "Cancelar" : "Agregar Noticia"}
                   </span>
-                </button>
-                <button
+                </button>                <button
                   onClick={handleLogout}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-lg border border-[#D4AF37] text-foreground font-semibold hover:bg-[#D4AF37]/10 transition-all duration-300"
                 >
@@ -399,17 +435,21 @@ export function News() {
                   />
                 </div>                <div>
                   <label className="block text-sm font-semibold text-foreground mb-2">
-                    Link a Imagen (Opcional)
+                    Link del Artículo/Noticia (Opcional)
                   </label>
                   <input
                     type="text"
                     value={formData.link}
-                    onChange={(e) =>
-                      setFormData({ ...formData, link: e.target.value })
-                    }
-                    placeholder="www.ejemplo.com/imagen.jpg o https://ejemplo.com/imagen.jpg"
+                    onChange={(e) => {
+                      setFormData({ ...formData, link: e.target.value });
+                      setExtractedImagePreview(null);
+                    }}
+                    placeholder="https://www.radiodos.com.ar/205051-articulo... o https://ejemplo.com/noticia"
                     className="w-full px-4 py-2 rounded-lg bg-background border border-[#D4AF37]/30 text-foreground placeholder-gray-500 focus:outline-none focus:border-[#D4AF37] focus:ring-2 focus:ring-[#D4AF37]/20 transition-all"
                   />
+                  <p className="text-xs text-foreground/60 mt-2">
+                    💡 Si pegas un link a un artículo, la imagen se extraerá automáticamente al publicar
+                  </p>
                 </div>
 
                 <div className="flex gap-4 justify-end">

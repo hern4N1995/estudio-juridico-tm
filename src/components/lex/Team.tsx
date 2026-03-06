@@ -2,22 +2,14 @@ import Image from "next/image";
 import { teamData } from "@/lib/data";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone } from "lucide-react";
+import { GoldenDivider } from "./GoldenDivider";
 
 export function Team() {
   return (
-    <section id="team" className="bg-card pt-0 md:pt-0 pb-16 md:pb-24">
-      <div className="flex items-center justify-center py-12 bg-card">
-        <div className="flex items-center justify-center gap-8 w-full max-w-5xl px-4">
-          <div className="flex-1" style={{ height: '4px', backgroundColor: '#d4af37', borderRadius: '2px', opacity: 0.6 }} />
-          <div className="flex items-center gap-6 shrink-0">
-            <div className="rounded-full" style={{ width: '96px', height: '4px', backgroundColor: '#d4af37' }} />
-            <span className="text-4xl font-bold whitespace-nowrap" style={{ color: '#d4af37' }}>✦</span>
-            <div className="rounded-full" style={{ width: '96px', height: '4px', backgroundColor: '#d4af37' }} />
-          </div>
-          <div className="flex-1" style={{ height: '4px', backgroundColor: '#d4af37', borderRadius: '2px', opacity: 0.6 }} />
-        </div>
-      </div>
-      <div className="container mx-auto max-w-7xl px-4 md:px-6">
+    <>
+      <section id="team" className="bg-card py-12 md:py-12 pb-16">
+        <GoldenDivider backgroundColor="bg-card" />
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 pt-8">
         <div className="mb-12 text-center">
           <h2 className="font-headline text-3xl font-bold text-foreground md:text-4xl">
             {teamData.title}
@@ -27,7 +19,7 @@ export function Team() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-3 mb-4">
           {teamData.members.map((member) => (
             <Card
               key={member.name}
@@ -76,5 +68,6 @@ export function Team() {
         </div>
       </div>
     </section>
+    </>
   );
 }

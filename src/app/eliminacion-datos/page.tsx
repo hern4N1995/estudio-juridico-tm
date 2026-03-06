@@ -24,11 +24,6 @@ export default function EliminacionDatos() {
             <h2 className="text-2xl font-bold text-slate-900 mb-3">
               Tu Derecho a la Privacidad
             </h2>
-            <p className="text-slate-700 leading-relaxed">
-              En el Estudio Jurídico Tránsito Martínez, respetamos tu privacidad y tus derechos. 
-              Si deseas que eliminemos tus datos personales de nuestros sistemas, aquí te explicamos 
-              cómo hacerlo.
-            </p>
           </section>
 
           {/* How to Request */}

@@ -5,18 +5,16 @@ import { useState, useRef, useEffect } from "react";
 import { servicesData } from "@/lib/data";
 import { Card } from "@/components/ui/card";
 import { X } from "lucide-react";
+import { GoldenDivider } from "./GoldenDivider";
 
 export function Services() {
   const [selectedService, setSelectedService] = useState<string | null>(null);
   const [cardPosition, setCardPosition] = useState<{ top: number; left: number } | null>(null);
-  const [windowWidth, setWindowWidth] = useState<number>(0);
+  const [isClient, setIsClient] = useState(false);
   const cardRefs = useRef<{ [key: string]: HTMLButtonElement | null }>({});
 
   useEffect(() => {
-    setWindowWidth(window.innerWidth);
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    setIsClient(true);
   }, []);
 
   const handleCardClick = (serviceTitle: string, event: React.MouseEvent) => {
@@ -37,23 +35,13 @@ export function Services() {
 
   return (
     <>
-      <div id="services" className="flex items-center justify-center py-12 bg-background">
-        <div className="flex items-center justify-center gap-8 w-full max-w-5xl px-4">
-          <div className="flex-1" style={{ height: '4px', backgroundColor: '#d4af37', borderRadius: '2px', opacity: 0.6 }} />
-          <div className="flex items-center gap-6 shrink-0">
-            <div className="rounded-full" style={{ width: '96px', height: '4px', backgroundColor: '#d4af37' }} />
-            <span className="text-4xl font-bold whitespace-nowrap" style={{ color: '#d4af37' }}>✦</span>
-            <div className="rounded-full" style={{ width: '96px', height: '4px', backgroundColor: '#d4af37' }} />
-          </div>
-          <div className="flex-1" style={{ height: '4px', backgroundColor: '#d4af37', borderRadius: '2px', opacity: 0.6 }} />
-        </div>
-      </div>
-      <section className="bg-background py-2 md:py-4 pb-48 relative">
-      <div className="container mx-auto max-w-7xl px-4 md:px-6">
-        <div className="mb-12 text-center">
-          <h2 className="font-headline text-3xl font-bold text-foreground md:text-4xl">
-            {servicesData.title}
-          </h2>
+      <section id="services" className="bg-background py-12 md:py-12 pb-20 relative">
+        <GoldenDivider backgroundColor="bg-background" />
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 pt-8">
+          <div className="mb-12 text-center">
+            <h2 className="font-headline text-3xl font-bold text-foreground md:text-4xl">
+              {servicesData.title}
+            </h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-foreground">
             {servicesData.subtitle}
           </p>
@@ -98,7 +86,7 @@ export function Services() {
           </div>
         </div>
 
-        <div className="mt-16 text-center space-y-4">
+        <div className="mt-16 text-center space-y-4 pb-4">
           <p className="text-lg text-foreground/90 leading-relaxed">
             El estudio se dedica al asesoramiento y representación judicial y extrajudicial, de personas humanas y jurídicas de Derecho Público y Privado.
           </p>
@@ -114,20 +102,17 @@ export function Services() {
             </a>
           </p>
         </div>
-        <p className="pt-20">
-            
-          </p>
       </div>
     </section>
 
       {/* Modal - renderizado fuera de la sección */}
-      {selectedService && cardPosition && windowWidth > 0 && (
+      {selectedService && cardPosition && isClient && (
         <div 
           onClick={handleBackdropClick}
           className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm flex items-center justify-center"
         >
           <div 
-            className="bg-[#1A1A1A] border border-[#D4AF37]/30 rounded-xl w-11/12 max-w-2xl max-h-[80vh] overflow-y-auto shadow-2xl relative"
+            className="bg-background dark:bg-[#1A1A1A] border border-[#D4AF37]/30 rounded-xl w-11/12 max-w-2xl max-h-[80vh] overflow-y-auto shadow-2xl relative"
           >
             <button
               onClick={() => setSelectedService(null)}
@@ -154,7 +139,7 @@ export function Services() {
                       <h3 className="text-lg md:text-xl font-bold mb-4" style={{ color: '#D4AF37' }}>
                         1.- Filiación, Parentalidad y Responsabilidad Familiar:
                       </h3>
-                      <ul className="list-disc list-inside space-y-2 text-gray-300 ml-2">
+                      <ul className="list-disc list-inside space-y-2 text-foreground ml-2">
                         <li>Juicio de Filiación, [hijos no reconocidos, ADN].</li>
                         <li>Cuota Alimentaria y Obra Social.</li>
                         <li>Régimen de Comunicación.</li>
@@ -168,7 +153,7 @@ export function Services() {
                       <h3 className="text-lg md:text-xl font-bold mb-4" style={{ color: '#D4AF37' }}>
                         2.- Divorcios y Acuerdos Extrajudiciales:
                       </h3>
-                      <ul className="list-disc list-inside space-y-2 text-gray-300 ml-2">
+                      <ul className="list-disc list-inside space-y-2 text-foreground ml-2">
                         <li>Divorcios – Unilaterales y Bilaterales.</li>
                         <li>Acuerdos Extrajudiciales.</li>
                         <li>Redacción de Convenio Regulador.</li>
@@ -182,7 +167,7 @@ export function Services() {
                       <h3 className="text-lg md:text-xl font-bold mb-4" style={{ color: '#D4AF37' }}>
                         3.- Violencia Familiar:
                       </h3>
-                      <ul className="list-disc list-inside space-y-2 text-gray-300 ml-2">
+                      <ul className="list-disc list-inside space-y-2 text-foreground ml-2">
                         <li>Violencia Familiar o Doméstica, física, psicológica, económica y moral.</li>
                         <li>Asesoramiento y acompañamiento en comisaria a la víctima.</li>
                       </ul>
@@ -205,7 +190,7 @@ export function Services() {
                       <h3 className="text-lg md:text-xl font-bold mb-4" style={{ color: '#D4AF37' }}>
                         Derecho Penal:
                       </h3>
-                      <ul className="list-disc list-inside space-y-2 text-gray-300 ml-2">
+                      <ul className="list-disc list-inside space-y-2 text-foreground ml-2">
                         <li>Asistencia en Comisaria.</li>
                         <li>Asistencia Letrada en Sede Judicial.</li>
                         <li>Eximición de Prisión.</li>
@@ -217,7 +202,7 @@ export function Services() {
                       <h3 className="text-lg md:text-xl font-bold mb-4" style={{ color: '#D4AF37' }}>
                         Fuero Federal:
                       </h3>
-                      <p className="text-gray-300 ml-2">
+                      <p className="text-foreground ml-2">
                         Asistencia Letrada Penal y Civil en fuero Federal en Corrientes, Chaco y Formosa.
                       </p>
                     </div>
@@ -239,7 +224,7 @@ export function Services() {
                       <h3 className="text-lg md:text-xl font-bold mb-4" style={{ color: '#D4AF37' }}>
                         1.- Accidente de Tránsito:
                       </h3>
-                      <ul className="list-disc list-inside space-y-2 text-gray-300 ml-2">
+                      <ul className="list-disc list-inside space-y-2 text-foreground ml-2">
                         <li>Asesoramiento y presentación de reclamos judiciales y extrajudiciales por accidentes de tránsito.</li>
                         <li>Asistencia letrada ante la UFRAC/Fiscalía.</li>
                         <li>Reclamos de Indemnizaciones de Daños y Perjuicios, en sede Civil.</li>
@@ -253,7 +238,7 @@ export function Services() {
                       <h3 className="text-lg md:text-xl font-bold mb-4" style={{ color: '#D4AF37' }}>
                         2.- Sucesiones y Herencias:
                       </h3>
-                      <ul className="list-disc list-inside space-y-2 text-gray-300 ml-2">
+                      <ul className="list-disc list-inside space-y-2 text-foreground ml-2">
                         <li>Sucesión Intestato en sede Judicial.</li>
                         <li>Herencias con o sin testamentos.</li>
                         <li>Legados.</li>
@@ -303,7 +288,7 @@ export function Services() {
                       <h3 className="text-lg md:text-xl font-bold mb-4" style={{ color: '#D4AF37' }}>
                         Derecho Laboral:
                       </h3>
-                      <ul className="list-disc list-inside space-y-2 text-gray-300 ml-2">
+                      <ul className="list-disc list-inside space-y-2 text-foreground ml-2">
                         <li>Reclamos por Falta de Registración o en Forma Deficiente.</li>
                         <li>Despidos.</li>
                         <li>Diferencias de Haberes.</li>
@@ -321,7 +306,7 @@ export function Services() {
                       <h3 className="text-lg md:text-xl font-bold mb-4" style={{ color: '#D4AF37' }}>
                         ART:
                       </h3>
-                      <ul className="list-disc list-inside space-y-2 text-gray-300 ml-2">
+                      <ul className="list-disc list-inside space-y-2 text-foreground ml-2">
                         <li>Reclamos antes Aseguradora de Riesgo del Trabajo (ART).</li>
                         <li>Asistencia ante Comisión Médica.</li>
                         <li>Rechazo de Denuncia del Accidente.</li>
@@ -346,7 +331,7 @@ export function Services() {
                   </div>
                   
                   <div className="space-y-6">
-                    <ul className="list-disc list-inside space-y-2 text-gray-300 ml-2 text-base md:text-lg">
+                    <ul className="list-disc list-inside space-y-2 text-foreground ml-2 text-base md:text-lg">
                       <li>Recursos registrales</li>
                       <li>Diligenciamiento de oficios</li>
                       <li>Inscripciones y levantamientos de embargos e inhibiciones</li>
@@ -368,7 +353,7 @@ export function Services() {
                     {selectedService}
                   </h2>
                   <div className="h-1 w-24 mb-6" style={{ backgroundColor: '#D4AF37' }} />
-                  <p className="text-gray-300 text-lg leading-relaxed">
+                  <p className="text-foreground text-lg leading-relaxed">
                     Información detallada para {selectedService}
                   </p>
                 </div>

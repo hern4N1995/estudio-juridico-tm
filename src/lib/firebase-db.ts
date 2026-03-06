@@ -17,7 +17,8 @@ export async function addNoticia(input: NoticiaInput): Promise<Noticia> {
     titulo: input.titulo,
     contenido: input.contenido,
     autor: input.autor,
-    ...(input.imagen ? { imagen: input.imagen } : {}), // Solo incluir imagen si existe
+    ...(input.imagen ? { imagen: input.imagen } : {}),
+    ...(input.link ? { link: input.link } : {}),
     fecha: new Date().toLocaleDateString('es-AR'),
     createdAt: now,
     updatedAt: now,

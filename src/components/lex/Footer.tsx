@@ -73,7 +73,7 @@ export function Footer() {
                 href="https://www.linkedin.com/in/hernanalegre/" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-white hover:opacity-80 transition-opacity"
+                className="text-foreground hover:opacity-80 transition-opacity dark:text-white"
               >
                 hern4N
               </a>

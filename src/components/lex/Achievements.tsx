@@ -6,9 +6,9 @@ import { TestimonialsSection } from "@/components/testimonials-section";
 export function Achievements() {
   return (
     <>
-      <section id="achievements" className="bg-background py-2 md:py-4 pb-24 relative">
-        <GoldenDivider />
-        <div className="container mx-auto max-w-7xl px-4 md:px-6">
+      <section id="achievements" className="bg-background py-12 md:py-12 pb-12 relative">
+        <GoldenDivider backgroundColor="bg-background" />
+        <div className="container mx-auto max-w-7xl px-4 md:px-6 pt-8">
           <div className="mb-12 text-center">
             <h2 className="font-headline text-3xl font-bold text-foreground md:text-4xl">
               {achievementsData.title}
@@ -18,7 +18,7 @@ export function Achievements() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 text-center md:grid-cols-4 md:gap-8 mb-20">
+          <div className="grid grid-cols-2 gap-4 text-center md:grid-cols-4 md:gap-8 mb-6">
             {achievementsData.achievements.map((item) => (
               <Card key={item.label} className="bg-card p-6">
                 <CardContent className="flex flex-col items-center justify-center p-0">
